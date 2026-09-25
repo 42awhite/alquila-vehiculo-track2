@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VRT_AnoFabricacion_ValidationRule</fullName>
+    <active>true</active>
+    <description>Esta regla de validación garantiza que el año de fabricación del vehículo no sea en el futuro.</description>
+    <errorConditionFormula>AND(
+    NOT(ISBLANK(VRT_DAT_ManufacturedYear__c)),
+    VRT_DAT_ManufacturedYear__c &gt; TODAY()
+)</errorConditionFormula>
+    <errorMessage>El año de fabricación no puede ser superior al año actual.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VRT_FechaFinal_ValidationRule</fullName>
+    <active>true</active>
+    <description>Esta regla de validación asegura que la fecha de fin del alquiler debe ser mayor o igual a la fecha de inicio del alquiler.</description>
+    <errorConditionFormula>VRT_DAT_FinalDate__c &lt; VRT_DAT_InitialDate__c</errorConditionFormula>
+    <errorMessage>La fecha de fin del alquiler debe ser mayor o igual a la fecha de inicio del alquiler.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VRT_VehiculoDispAlquiler_ValidationRule</fullName>
+    <active>true</active>
+    <description>Garantizar que un vehículo esté disponible para alquiler en el momento,  Es decir, si el vehículo está siendo usado por otro alquiler, está en mantenimiento o fuera de servicio no podrá ser seleccionado.</description>
+    <errorConditionFormula>OR (VRT_LKP_Vehicle__r.VRT_FLG_Available__c  = false,
+					ISPICKVAL(VRT_LKP_Vehicle__r.VRT_SEL_Status__c,&quot;Fuera de servicio&quot;),
+		  	ISPICKVAL(VRT_LKP_Vehicle__r.VRT_SEL_Status__c,&quot;En mantenimiento&quot;) 
+)</errorConditionFormula>
+    <errorMessage>El vehículo no está disponible para alquiler en este momento</errorMessage>
+</ValidationRule>

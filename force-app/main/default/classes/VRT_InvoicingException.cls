@@ -1,0 +1,1 @@
+public class VRT_InvoicingException extends Exception {}

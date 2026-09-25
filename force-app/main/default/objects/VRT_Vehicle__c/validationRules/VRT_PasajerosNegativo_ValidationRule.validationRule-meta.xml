@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VRT_PasajerosNegativo_ValidationRule</fullName>
+    <active>true</active>
+    <description>Esta regla de validación asegura que el número de pasajeros máximo del vehículo no sea negativo.</description>
+    <errorConditionFormula>AND(NOT(ISBLANK(VRT_NUM_Passengers__c)), VRT_NUM_Passengers__c &lt; 0)</errorConditionFormula>
+    <errorMessage>El número de pasajeros no puede ser negativo.</errorMessage>
+</ValidationRule>

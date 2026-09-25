@@ -1,0 +1,26 @@
+<template>
+    <lightning-card title="Buscador Global de Flota" icon-name="standard:vehicle">
+        <div class="slds-p-horizontal_small slds-p-bottom_small">
+            <lightning-input
+                type="search"
+                label="Buscar por Matrícula, Marca o Modelo"
+                onchange={handleSearchChange}
+                placeholder="Escribe al menos 2 caracteres...">
+            </lightning-input>
+
+            <template if:true={results.length}>
+                <lightning-datatable
+                    key-field="Id"
+                    data={results}
+                    columns={columns}
+                    onrowaction={handleRowAction}
+                    hide-checkbox-column>
+                </lightning-datatable>
+            </template>
+
+            <template if:true={noResults}>
+                <p class="slds-p-top_small">No se encontraron vehículos.</p>
+            </template>
+        </div>
+    </lightning-card>
+</template>

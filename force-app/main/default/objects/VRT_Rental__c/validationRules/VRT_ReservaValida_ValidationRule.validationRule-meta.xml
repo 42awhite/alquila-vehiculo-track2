@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VRT_ReservaValida_ValidationRule</fullName>
+    <active>true</active>
+    <description>Esta regla asegura que no se hagan reservas sin pagar que se cancelen a última hora, de manera que para considerar una reserva como válida, esta deberá ser pagada por adelantado.</description>
+    <errorConditionFormula>AND(
+    OR(ISPICKVAL(VRT_SEL_PaymentStatus__c, &quot;Pendiente&quot;),
+							ISPICKVAL(VRT_SEL_PaymentStatus__c, &quot;Atrasado&quot;)
+							),
+				OR(ISPICKVAL(VRT_SEL_Status__c, &quot;Reservado&quot;))
+)</errorConditionFormula>
+    <errorMessage>Si no se adelanta el pago, no se puede considerar un alquiler como reservado</errorMessage>
+</ValidationRule>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VRT_CosteNegativo_ValidationRule</fullName>
+    <active>true</active>
+    <description>Este regla garantiza que el coste total no puede ser negativo.</description>
+    <errorConditionFormula>VRT_DIV_TotalCost__c &lt; 0</errorConditionFormula>
+    <errorMessage>El coste total no puede ser negativo.</errorMessage>
+</ValidationRule>

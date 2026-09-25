@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VRT_SEL_Status__c</fullName>
+    <description>Este campo de la lista de selección indicará el estado del alquiler.</description>
+    <label>Estado</label>
+    <required>true</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Reservado</fullName>
+                <default>false</default>
+                <label>Reservado</label>
+            </value>
+            <value>
+                <fullName>En curso</fullName>
+                <default>false</default>
+                <label>En curso</label>
+            </value>
+            <value>
+                <fullName>Completado</fullName>
+                <default>false</default>
+                <label>Completado</label>
+            </value>
+            <value>
+                <fullName>Cancelado</fullName>
+                <default>false</default>
+                <label>Cancelado</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VRT_PagoPendienteNoInicia_ValidationRule</fullName>
+    <active>true</active>
+    <description>Esta restricción asegura que mientras que el alquiler esté pendiente de pago, éste no podrá iniciarse.</description>
+    <errorConditionFormula>AND(
+    OR(ISPICKVAL(VRT_SEL_PaymentStatus__c, &quot;Pendiente&quot;),
+							ISPICKVAL(VRT_SEL_PaymentStatus__c, &quot;Atrasado&quot;)),
+				(ISPICKVAL(VRT_SEL_Status__c, &quot;En Curso&quot;))										
+)</errorConditionFormula>
+    <errorMessage>Mientras el alquiler esté pendiente de pago no se puede iniciar.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VRT_Matricula_ValidationRule</fullName>
+    <active>true</active>
+    <description>Asegura que la matrícula tenga exactamente 7 caracteres.</description>
+    <errorConditionFormula>ISBLANK(VRT_TXT_LicensePlate__c) || LEN(VRT_TXT_LicensePlate__c) != 7</errorConditionFormula>
+    <errorMessage>La matrícula debe tener 7 caracteres.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VRT_AvailableVehicles_List</fullName>
+    <columns>NAME</columns>
+    <columns>VRT_TXT_Brand__c</columns>
+    <columns>VRT_DAT_ManufacturedYear__c</columns>
+    <columns>VRT_NUM_Passengers__c</columns>
+    <columns>VRT_NUM_Mileage__c</columns>
+    <columns>VRT_SEL_Status__c</columns>
+    <columns>VRT_FLG_Available__c</columns>
+    <filterScope>Mine</filterScope>
+    <filters>
+        <field>VRT_FLG_Available__c</field>
+        <operation>equals</operation>
+        <value>1</value>
+    </filters>
+    <label>Vehículos Disponibles</label>
+</ListView>

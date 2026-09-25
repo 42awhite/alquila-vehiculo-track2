@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VRT_SEL_EnergyType__c</fullName>
+    <description>Campo picklist para especificar el tipo de combustible o energía del vehículo.</description>
+    <label>Combustible</label>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Eléctrico</fullName>
+                <default>false</default>
+                <label>Eléctrico</label>
+            </value>
+            <value>
+                <fullName>Híbrido</fullName>
+                <default>false</default>
+                <label>Híbrido</label>
+            </value>
+            <value>
+                <fullName>Gasolina</fullName>
+                <default>false</default>
+                <label>Gasolina</label>
+            </value>
+            <value>
+                <fullName>Diesel</fullName>
+                <default>false</default>
+                <label>Diesel</label>
+            </value>
+            <value>
+                <fullName>Otro</fullName>
+                <default>false</default>
+                <label>Otro</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

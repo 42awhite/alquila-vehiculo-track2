@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VRT_SEL_Condition__c</fullName>
+    <description>Estado condición del vehículo en el que se encuentra, y que depende del número de usos.</description>
+    <inlineHelpText>Estado condición del vehículo en el que se encuentra, y que depende del número de usos.</inlineHelpText>
+    <label>Condición</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Recién fabricado</fullName>
+                <default>true</default>
+                <label>Recién fabricado</label>
+            </value>
+            <value>
+                <fullName>Casi nuevo</fullName>
+                <default>false</default>
+                <label>Casi nuevo</label>
+            </value>
+            <value>
+                <fullName>Algo desgastado</fullName>
+                <default>false</default>
+                <label>Algo desgastado</label>
+            </value>
+            <value>
+                <fullName>Bastante desgastado</fullName>
+                <default>false</default>
+                <label>Bastante desgastado</label>
+            </value>
+            <value>
+                <fullName>Deplorable</fullName>
+                <default>false</default>
+                <label>Deplorable</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
