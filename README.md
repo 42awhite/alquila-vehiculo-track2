@@ -1,58 +1,65 @@
-# Salesforce DX Project
+# Alquila Vehículo S.L. — Track II (Salesforce)
 
-Salesforce DX is a development approach that brings source-driven development, team collaboration, and continuous integration to the Salesforce Platform. Instead of working directly in an org through a web browser, you work with metadata as source files in a local DX project, track changes in version control, and deploy through automated processes.
+Proyecto técnico desarrollado como parte del **Talent Day de NTT Data**, sobre la base funcional construida en el Track I. Implementa 6 requerimientos de negocio sobre un sistema de gestión de alquiler de vehículos, cubriendo automatización con Apex, procesos declarativos, componentes Lightning y buenas prácticas de arquitectura Enterprise en Salesforce.
 
-This project template gets you started with the tools and structure you need to build Salesforce applications using source control, scratch orgs, and the Salesforce CLI.
+## Stack técnico
 
-## Prerequisites
+- **Apex** (Triggers, Classes, Queueable, Tests)
+- **Lightning Web Components (LWC)**
+- **Approval Processes** (nativo, con Flow subyacente)
+- **Record-Triggered Flow**
+- **Custom Metadata Types**
+- **Salesforce DX** para desarrollo y despliegue
 
-Before you start, make sure you have:
+## Patrón de arquitectura
 
-- **Salesforce CLI** - Download from [developer.salesforce.com/tools/salesforcecli](https://developer.salesforce.com/tools/salesforcecli). See [Install Salesforce CLI](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_install_cli.htm) for details.
-- **VS Code with Salesforce Extension Pack** - See [Installation Instructions](https://developer.salesforce.com/docs/platform/sfvscode-extensions/guide/install.html) for details. Includes the Agentforce Vibes extension.
-- **A development org** - Sign up for a free Developer Edition org [here](https://developer.salesforce.com/signup).
-- **Dev Hub enabled** (optional, required to create scratch orgs) - You can enable Dev Hub in your development org under Setup > Dev Hub.  See [Provide Developers Access to Salesforce DX Tools](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_setup_dx_tools.htm).
+Todo el código sigue el patrón **Trigger → Handler → Service**, con estricta separación de responsabilidades:
 
-## Project Structure
+- El **Trigger** (`VRT_TRG_Rental`) no contiene lógica, únicamente delega según el contexto de ejecución.
+- El **Handler** (`VRT_TRG_RentalHandler`) orquesta qué se ejecuta en cada evento (`before`/`after`, `insert`/`update`).
+- Los **Services** (`VRT_PricingEngineService`, `VRT_AvailabilityService`) contienen la lógica de negocio pura, reutilizable desde múltiples puntos de entrada (triggers, controllers de LWC, procesos async).
 
-Your DX project follows this structure:
+Principios aplicados de forma consistente: bulkificación estricta (cero SOQL/DML dentro de bucles), manejo explícito de errores, y separación entre lógica de cálculo y lógica de persistencia.
 
-- **`force-app/main/default/`** - Your metadata source files live in this default package directory. You can configure additional package directories in the `sfdx-project.json` file.
-- **`config/`** - Scratch org definitions and project settings
-- **`scripts/`** - Automation scripts for common tasks
-- **`sfdx-project.json`** - Project manifest that defines package directories, namespace, API version, and other project-level settings
+## Módulos implementados
 
-See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm).
+| # | Módulo | Resumen |
+|---|---|---|
+| 4.1 | **Sistema de Precios Dinámicos** | Cálculo automático del Coste Total según tipo de vehículo, temporada, fidelidad del cliente y penalización por retraso. Tarifas administrables vía Custom Metadata Type (`VRT_PricingRule__mdt`). |
+| 4.2 | **Control de Disponibilidad de Flota** | Bloquea la creación/edición de Alquileres con fechas solapadas para un mismo vehículo, incluyendo detección de conflictos dentro de un mismo lote de carga masiva. |
+| 4.3 | **Sistema de Aprobaciones Financieras** | Aprobación escalonada según importe (simple &gt;3.000€, doble &gt;10.000€) mediante dos Approval Processes nativos, disparados automáticamente por un Record-Triggered Flow. |
+| 4.4 | **Consola Operativa (LWC)** | Componente Lightning integrado en la página de Account: listado de alquileres activos, filtro y orden, creación con simulación de precio previa al guardado, y feedback en tiempo real. |
+| 4.5 | **Facturación Automática** | Al completar un Alquiler, un proceso `Queueable` genera la Factura correspondiente, intenta notificar por email al cliente, y registra la trazabilidad completa en un Log de Proceso — sin bloquear la operación principal del usuario. |
+| 4.6 | **Buscador Global de Flota** | Componente Lightning en la Home Page: búsqueda de vehículos por texto parcial (Matrícula, Marca, Modelo), con navegación directa a la ficha del resultado. |
 
-## Get Started
+## Modelo de datos (objetos nuevos sobre el Track I)
 
-Ready to start developing? The [Get Started with Salesforce DX](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_get_started_dx.htm) guide walks you through your first project, from creating a scratch org to creating a simple Apex class or LWC to deploying your code to a sandbox.
+| Objeto | Tipo | Propósito |
+|---|---|---|
+| `VRT_PricingRule__mdt` | Custom Metadata Type | Tarifas administrables por Tipo de Vehículo + Temporada |
+| `VRT_Invoice__c` | Custom Object | Facturas generadas automáticamente al completar un Alquiler |
+| `VRT_ProcessLog__c` | Custom Object | Trazabilidad de los procesos asíncronos (éxito/error por paso) |
 
-## Common Salesforce CLI Commands
+## Clases Apex principales
 
-Here are common CLI commands that you'll use the most:
+- `VRT_PricingEngineService` — motor de cálculo de precios (4.1), reutilizado también por la simulación de 4.4
+- `VRT_AvailabilityService` — validación de solapamiento de fechas (4.2)
+- `VRT_RentalConsoleController` — controller `@AuraEnabled` de la Consola Operativa (4.4)
+- `VRT_InvoicingQueueable` — proceso asíncrono de facturación (4.5)
+- `VRT_VehicleSearchController` — controller `@AuraEnabled` del Buscador Global (4.6)
 
-- `sf org login web`: Authorize an org
-- `sf org open`: Open your org in a browser
-- `sf org create scratch`: Create a scratch org
-- `sf project deploy start`: Deploy metadata to your org
-- `sf project retrieve start`: Retrieve metadata from your org
-- `sf template generate <artifact>`: Scaffold new components, such as Apex classes and triggers, LWC components, Lightning apps, and more
-- `sf apex <command>`: Run Apex tests, run anonymous Apex blocks, and view logs
-- `sf data <command>`: Work with test data
-- `sf alias <command>`: Manage org aliases
-- `sf config <command>`: Configure CLI settings
+Cada clase de lógica de negocio cuenta con su correspondiente clase de test (`*_Test`), con cobertura ≥85% y escenarios positivos, negativos y de carga masiva.
 
-## Use Agentforce Vibes to Build Lightning Apps
+## Despliegue
 
-Transform your ideas into custom Lightning apps that extend CRM workflows directly in Lightning Experience. Through natural conversations with Agentforce Vibes, implement custom objects and fields, complex business logic, and dynamic UI components. See [Build a Lightning App Using Agentforce Vibes](https://developer.salesforce.com/docs/platform/einstein-for-devs/guide/lexapp-overview.html).
+```bash
+sf project deploy start --source-dir force-app
+```
 
-## Additional Resources
+## Ejecutar los tests
 
-- [Agentforce Vibes Developer Guide](https://developer.salesforce.com/docs/platform/einstein-for-devs/guide/einstein-overview.html)
-- [Salesforce CLI Installation Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/)
-- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/)
-- [Salesforce CLI Plugin Development Guide](https://developer.salesforce.com/docs/platform/salesforce-cli-plugin/guide/conceptual-overview.html)
-- [Salesforce VS Code Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
+Desde VS Code: `Ctrl+Shift+P` → `SFDX: Run Apex Tests`, o desde Developer Console → Overall Code Coverage para ver el detalle por clase.
 
+## Autoría
+
+Desarrollado por Ana Blanco Mota como parte del proceso de selección de NTT Data (Talent Day).
